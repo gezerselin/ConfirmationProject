@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Survey>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+
+
+        @if (DateTime.Now> item.Deadline)
+        {
+            <div class="col-12" style="padding:10px">
+                <partial name="_TimeOutSurveyCard" model="item" />
+            </div>
+        }
+
+
+    }
+</div>

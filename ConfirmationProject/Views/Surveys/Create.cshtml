@@ -1,0 +1,61 @@
+﻿@model ConfirmationProject.Models.Survey
+
+@{
+    ViewData["Title"] = "Create";
+    int UserId = Convert.ToInt32(User.Identity.Name);
+}
+
+<h1>Create</h1>
+
+<h4>Survey</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Detail" class="control-label"></label>
+                <input asp-for="Detail" class="form-control" />
+                <span asp-validation-for="Detail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="numberOfConfirmation" class="control-label"></label>
+                <input asp-for="numberOfConfirmation" class="form-control" />
+                <span asp-validation-for="numberOfConfirmation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @{ int countOfYes = 0;}
+                <input type="hidden" name="numberOfYes" id="numberOfYes" asp-for="@countOfYes" />
+            </div>
+            <div class="form-group">
+
+                @{ int countOfNo = 0;}
+                <input type="hidden" name="numberOfNo" id="numberOfNo" asp-for="@countOfNo" />
+
+            </div>
+            <div class="form-group">
+
+                <input type="hidden" name="CreatorId" id="CreatorId" asp-for="@UserId" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Deadline" class="control-label"></label>
+                <input asp-for="Deadline" class="form-control" />
+                <span asp-validation-for="Deadline" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -1,0 +1,52 @@
+﻿@model Survey
+@{
+    int UserId = Convert.ToInt32(User.Identity.Name);
+    double oran = Math.Round((((double)Model.numberOfYes / (double)Model.numberOfConfirmation) * 100), 2);
+    
+    var responcses = Model.Responses.FirstOrDefault(x => x.UserId == UserId);
+       
+
+
+
+}
+<div class="card w-100">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <h3 class="card-title">@Model.Title</h3>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-4">
+
+                <h6 class="card-title">Son tarih: @Model.Deadline</h6>
+            </div>
+        </div>
+
+        <p class="card-text">@Model.Detail</p>
+
+        @if (responcses != null)
+        {
+            @if ( responcses.Answer == "Yes")
+            {
+                <p>Cevabınız: Evet</p>
+            }
+            else if (responcses.Answer == "No")
+            {
+                <p>Cevabınız: Hayır</p>
+            }
+        }
+
+        else
+        {
+            <p>Yanıtlamadınız...</p>
+        }
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: @oran%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">@oran %</div>
+        </div>
+
+
+
+    </div>
+</div>
+
+
