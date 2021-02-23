@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace ConfirmationProject.Controllers
             {
                 List<Claim> claims = new List<Claim>();
 
-
+                Debug.WriteLine("deneme");
                 var role = dbContext.Roles.FirstOrDefault(x => x.Id == user.RoleId);
 
                 claims.Add(new Claim(ClaimTypes.Name, user.Id.ToString()));
