@@ -51,6 +51,9 @@ namespace ConfirmationProject.Controllers
             var SelectedSurvey = dbContext.Surveys.FirstOrDefault(x => x.Id == surveyid);
             var user = dbContext.Users.FirstOrDefault(x => x.Id == SelectedSurvey.CreatorId);
 
+            var UserInfo = dbContext.Users.FirstOrDefault(x => x.Id == (Convert.ToInt32(User.Identity.Name)));
+
+            double requiredConfirmation = Math.Round((((double)SelectedSurvey.numberOfYes / (double)SelectedSurvey.numberOfConfirmation) * 100), 2);
 
             MailMessage objeto_mail = new MailMessage();
 
@@ -64,8 +67,14 @@ namespace ConfirmationProject.Controllers
             client.Credentials = new System.Net.NetworkCredential("selingezr@gmail.com", "gefzzofrfjxnwuql");
             objeto_mail.From = new MailAddress("selingezr@gmail.com");
             objeto_mail.To.Add(new MailAddress(user.Email));
-            objeto_mail.Subject = "Password Recover";
-            objeto_mail.Body = "Message";
+            objeto_mail.Subject = "Yeni Onay";
+            objeto_mail.Body = $" Onay veren : {UserInfo.Name} {UserInfo.LastName} \n" +
+                $"İletişim:\n {UserInfo.Email}\n " +
+                $"{UserInfo.PhoneNumber}\n" +
+                $"Cevabı : {response.Answer} \n" +
+                $"Notu: {response.Note}\n" +
+                $"Kabul sayısı : {SelectedSurvey.numberOfYes}  Red sayısı : {SelectedSurvey.numberOfNo} \n" +
+                $"Kabul eden sayısı/Onay sayısı: %{requiredConfirmation} \nKabul için kalan onay sayısı: {(SelectedSurvey.numberOfConfirmation-SelectedSurvey.numberOfYes)} ";
             client.Send(objeto_mail);
 
             return Redirect("/");

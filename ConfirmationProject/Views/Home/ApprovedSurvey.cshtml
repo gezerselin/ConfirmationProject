@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Survey>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "ApprovedSurvey";
 }
 
 <div class="row">
@@ -8,7 +8,7 @@
     {
 
 
-        @if (DateTime.Now> item.Deadline)
+        @if (item.numberOfYes==item.numberOfConfirmation)
         {
             <div class="col-12" style="padding:10px">
                 <partial name="_TimeOutSurveyCard" model="item" />
@@ -24,7 +24,7 @@
 
     @for (int i = 1; i <= ViewBag.totalPages; i++)
     {
-        <li class="page-item"><a class="page-link" asp-action="TimeOutSurvey" asp-controller="Home" asp-route-page="@i">@i</a></li>
-    }
+<li class="page-item"><a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="@i" >@i</a></li>
+}
 
 </ul>

@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Survey>
 @{
     ViewData["Title"] = "Home Page";
+    int Flag = 0;
 }
 
 
@@ -15,13 +16,40 @@
     {
 
 
-        @if (((item.Responses.FirstOrDefault(x => x.UserId == UserId)) == null)&&(DateTime.Now <= item.Deadline))
+        @if (((item.Responses.FirstOrDefault(x => x.UserId == UserId)) == null) && (DateTime.Now <= item.Deadline)&&(item.numberOfYes<item.numberOfConfirmation))
         {
             <div class="col-12" style="padding:10px">
                 <partial name="_SurveyCard" model="item" />
             </div>
+            Flag++;
         }
 
 
     }
+
 </div>
+@if (Flag == 0)
+{
+
+    <div class="row" style="padding-top:100px">
+         <div class="col-4"></div>
+         <div class="col-2">
+
+             <h3>
+                <img src="~/tick (4).png" />
+             </h3>
+         </div>
+         <div class="col-6"></div>
+     </div>
+
+}
+
+<ul class="pagination">
+
+
+    @for (int i = 1; i <= ViewBag.totalPages; i++)
+    {
+        <li class="page-item"><a class="page-link" asp-action="Index" asp-controller="Home" asp-route-page="@i">@i</a></li>
+    }
+
+</ul>

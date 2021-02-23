@@ -25,10 +25,12 @@ namespace ConfirmationProject.Models
         public string Email { get; set; }
 
         [Display(Name = "Kullanıcı Adı")]
+        
         [Required(ErrorMessage = "Lütfen kullanıcı adı girin")]
         public string UserName { get; set; }
 
         [Display(Name = "Şifre")]
+        [DataType(DataType.Password)]
         [Required(ErrorMessage = "Lütfen şifre girin")]
         public string Password { get; set; }
 
@@ -43,6 +45,7 @@ namespace ConfirmationProject.Models
         [Display(Name = "Cinsiyet")]
         public int GenderId { get; set; }
         public Gender Gender { get; set; }
+
         public IList<Response> Responses { get; set; }
     }
 }

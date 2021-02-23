@@ -54,7 +54,7 @@ namespace ConfirmationProject.Controllers
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
-
+   
                 return Redirect("/");
 
 

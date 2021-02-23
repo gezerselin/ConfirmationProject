@@ -25,3 +25,12 @@
 
     }
 </div>
+<ul class="pagination">
+
+
+    @for (int i = 1; i <= ViewBag.totalPages; i++)
+    {
+        <li class="page-item"><a class="page-link" asp-action="AnsweredSurvey" asp-controller="Home" asp-route-page="@i" >@i</a></li>
+    }
+
+</ul>

@@ -1,9 +1,4 @@
-﻿@{ 
-    int id = (Convert.ToInt32(User.Identity.Name));
-
-    
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,12 +19,15 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
 
+
+
                     <ul class="nav navbar-nav  ">
                         @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
                         {
 
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Surveys" asp-action="Index">
+
 
 
                                     <img src="~/online-test.png" /> Anket İşlemleri
@@ -43,42 +41,26 @@
                                 <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown">
 
 
+                                    <img src="~/user (2).png" /> Profilim
 
-                                    <img src="~/user (2).png" />  Profilim
                                 </button>
 
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
                                     @{
                                         int UserId = Convert.ToInt32(User.Identity.Name);
 
                                     }
-                                    <li> </li>
                                     <li><a class="dropdown-item" asp-action="Edit" asp-controller="Users" asp-route-id="@UserId">Kullanıcı Bilgilerim</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LogOut">Çıkış Yap</a></li>
                                 </ul>
-
-
                             </li>
                         }
                     </ul>
-                    <ul class="nav navbar-nav mx-auto">
-
-                        <li class="nav-item">
-                            <form method="post" asp-action="Search" asp-controller="Home" class="d-flex">
-                                <input class="form-control me-2" name="searchItem" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn " type="submit">
-                                    <img src="~/search.png" />
-                                </button>
-                            </form>
-                        </li>
-
-                    </ul>
-
                 </div>
             </div>
         </nav>
-
 
         <div class="row" style="padding-top:10px">
             <div class="col-3"></div>

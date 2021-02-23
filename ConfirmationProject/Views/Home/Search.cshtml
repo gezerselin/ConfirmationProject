@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Survey>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@{
+    int UserId = Convert.ToInt32(User.Identity.Name);
+
+}
+
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+
+
+        @if ((item.Responses.FirstOrDefault(x => x.UserId == UserId)) != null)
+        {
+            <div class="col-12" style="padding:10px">
+                <partial name="_AnsweredSurveyCard" model="item" />
+            </div>
+        }
+        else if (((item.Responses.FirstOrDefault(x => x.UserId == UserId)) == null) && ((DateTime.Now > item.Deadline) || (item.numberOfYes == item.numberOfConfirmation)))
+        {
+            <div class="col-12" style="padding:10px">
+                <partial name="_AnsweredSurveyCard" model="item" />
+            </div>
+        }
+        else if (((item.Responses.FirstOrDefault(x => x.UserId == UserId)) == null) && (DateTime.Now <= item.Deadline) && (item.numberOfYes != item.numberOfConfirmation))
+        {
+            <div class="col-12" style="padding:10px">
+                <partial name="_SurveyCard" model="item" />
+            </div>
+        }
+
+
+    }
+</div>
+

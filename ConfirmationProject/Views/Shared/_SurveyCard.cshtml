@@ -17,19 +17,46 @@
                 <h6 class="card-title">Son tarih: @Model.Deadline</h6>
             </div>
         </div>
+        <div class="row">
+            <div class="col-6">
+                <p class="card-text">@Model.Detail</p>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-4">
+                <p class="card-text">Gereken toplam onay sayısı: @Model.numberOfConfirmation </p>
+                <p class="card-text">Kabul için kalan onay sayısı: @(Model.numberOfConfirmation-Model.numberOfYes)</p>
 
-        <p class="card-text">@Model.Detail</p>
-
+            </div>
+        </div>
         
-        <form style="padding:10px" asp-action="CreateResponse" asp-controller="Response" asp-route-surveyid="@Model.Id" method="post">
 
-            <button type="submit" class="btn btn-primary">Oyla</button>
-            <span class="cart-item"></span>
+        <div class="row">
+            <div class="col-3">
+                <form style="padding:10px" asp-action="CreateResponse" asp-controller="Response" asp-route-surveyid="@Model.Id" method="post">
 
-        </form>
+                    <button type="submit" class="btn btn-outline-success">
 
-        <div  class="progress">
-            <div class="progress-bar" role="progressbar" style="width: @oran%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">@oran %</div>
+                        <img src="~/choose.png" />  Yanıt Ver
+                    </button>
+                    <span class="cart-item"></span>
+
+                </form>
+            </div>
+            <div class="col-5"></div>
+            <div class="col-4">
+
+                <p class="card-text" style="padding:10px">
+                    <img src="~/checked (1).png" /> @Model.numberOfYes   |
+                    <img src="~/x-button.png" />   @Model.numberOfNo
+                </p>
+
+
+            </div>
+        </div>
+        
+
+        <div class="progress">
+            <div class="progress-bar bg-success" role="progressbar" style="width: @oran%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">@oran %</div>
         </div>
 
 

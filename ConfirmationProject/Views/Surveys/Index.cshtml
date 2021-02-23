@@ -1,23 +1,44 @@
-﻿@model IEnumerable<ConfirmationProject.Models.Survey>
+﻿
+@model IEnumerable<ConfirmationProject.Models.Survey>
 
 @{
+    Layout = "_Layout2";
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Anketler</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <div class="row">
+        <div class="col-3">
+            <a asp-action="Create">Yeni bir anket oluştur</a>
+        </div>
+        <div class="col-8"></div>
+        <div class="col-1">
+            <a asp-action="DownloadExcelDocument">
+                <img src="~/excel.png" />
+            </a>
+        </div>
+    </div>
+
+
 </p>
+<form asp-controller="Surveys" asp-action="Index" method="get">
+    <p>
+        Başlık: <input type="text" name="SearchString" />
+        <button class="btn"  type="submit">
+
+        <img src="~/search.png" />
+        </button>
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.ActionLink("Başlık", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Detail)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.numberOfConfirmation)
             </th>
@@ -28,23 +49,21 @@
                 @Html.DisplayNameFor(model => model.numberOfNo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatorId)
+                @Html.ActionLink("Son Tarih", "Index", new { sortOrder = ViewBag.NameSortParm })
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deadline)
-            </th>
+
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Detail)
-            </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.numberOfConfirmation)
             </td>
@@ -54,18 +73,65 @@
             <td>
                 @Html.DisplayFor(modelItem => item.numberOfNo)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatorId)
-            </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.Deadline)
             </td>
+
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detaylar</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="delete" data-id="@item.Id">
+                    <img src="~/trash (1).png" />
+
+                </a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('.delete').on('click', function (event) {
+                event.preventDefault();
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '/Surveys/Delete/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        alertify.confirm(data + ' anketini silmek istediğinize emin misiniz?', function () {
+                            deleteSurvey(id);
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                })
+            });
+            function deleteSurvey(id) {
+                $.ajax({
+                    url: '/Surveys/Delete/' + id,
+                    type: 'POST',
+
+                    success: function (data) {
+                        if (data === 'OK') {
+                            location = location;
+                            alertify.success('Anket silindi :)')
+                        }
+
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                })
+            }
+        })
+    </script>
+}
+
+
+

@@ -10,12 +10,12 @@
 }
 
 <form method="post" asp-action="AddResponse" asp-controller="Response" asp-route-surveyid="@Model.Id" asp-route-userid="@UserId">
-    <div class="modal-body">
+  
         <div class="form-group">
-            <h5>@Model.Title</h5>
+            <h3>@Model.Title</h3>
         </div>
         <div class="form-group">
-            <h5>@Model.Detail</h5>
+            <p>@Model.Detail</p>
         </div>
         <div class="form-group">
             <div class="form-check form-check-inline">
@@ -31,13 +31,9 @@
             <label>Notunuz varsa iletebilirsiniz :)</label>
             <input type="text" name="note" class="form-control" />
         </div>
-
-
-
-
-    </div>
+   
     <div >
        
-        <button type="submit" class="btn btn-primary">Oyla</button>
+        <button type="submit" class="btn btn-primary">Yanıt Ver</button>
     </div>
 </form>

@@ -1,5 +1,6 @@
 ﻿using ConfirmationProject.Data;
 using ConfirmationProject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,12 @@ namespace ConfirmationProject.Services
         public User ValidUser(string UserName, string password)
         {
             return dbContext.Users.FirstOrDefault(u => u.UserName == UserName && u.Password == password);
+        }
+
+        public int EditSurvey(User user)
+        {
+            dbContext.Entry(user).State = EntityState.Modified;
+            return dbContext.SaveChanges();
         }
     }
 }

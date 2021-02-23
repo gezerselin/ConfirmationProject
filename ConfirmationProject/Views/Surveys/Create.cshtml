@@ -1,15 +1,16 @@
 ﻿@model ConfirmationProject.Models.Survey
 
 @{
+    Layout = "_Layout2";
     ViewData["Title"] = "Create";
     int UserId = Convert.ToInt32(User.Identity.Name);
 }
 
-<h1>Create</h1>
 
-<h4>Survey</h4>
+<h4>Anket Oluşturma</h4>
 <hr />
 <div class="row">
+    <div class="col-md-4"></div>
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -43,19 +44,28 @@
                 <input type="hidden" name="CreatorId" id="CreatorId" asp-for="@UserId" class="form-control" />
 
             </div>
+
+            <div class="form-group">
+
+                @{ DateTime creationDate= DateTime.Now;}
+                <input type="hidden" name="CreationDate" id="CreationDate" asp-for="@creationDate" />
+
+            </div>
+
             <div class="form-group">
                 <label asp-for="Deadline" class="control-label"></label>
                 <input asp-for="Deadline" class="form-control" />
                 <span asp-validation-for="Deadline" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Oluştur" class="btn btn-primary" />
             </div>
         </form>
     </div>
+    <div class="col-md-4"></div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Anketler Sayfasına Dön</a>
 </div>
 

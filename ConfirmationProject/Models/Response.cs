@@ -8,6 +8,7 @@ namespace ConfirmationProject.Models
     public class Response
     {
         public int Id { get; set; }
+
         public string Answer { get; set; }
         public string Note { get; set; }
 
