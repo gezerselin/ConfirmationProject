@@ -9,6 +9,7 @@ using ConfirmationProject.Data;
 using ConfirmationProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using ConfirmationProject.Services;
+using System.Security;
 
 namespace ConfirmationProject.Controllers
 {
@@ -56,14 +57,16 @@ namespace ConfirmationProject.Controllers
         }
 
 
+        [Authorize]
         // GET: Users/Edit/5
         public IActionResult Edit(int id)
         {
-            if (id == null)
+
+            //Make sure the submission belongs to the user
+            if ((userService.GetUserById(id)).Id != (Convert.ToInt32(User.Identity.Name)))
             {
                 return NotFound();
             }
-
 
             var user = userService.GetUserById(id);
             if (user == null)

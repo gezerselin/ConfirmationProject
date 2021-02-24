@@ -4,7 +4,9 @@
 @{
     Layout = "_Layout2";
     ViewData["Title"] = "Index";
+
 }
+
 
 <h1>Anketler</h1>
 
@@ -13,14 +15,13 @@
         <div class="col-3">
             <a asp-action="Create">Yeni bir anket oluştur</a>
         </div>
-        <div class="col-6"></div>
-        <div class="col-3">
-            <form asp-action="DownloadExcelDocument">
-                <button class="btn" >
-                    Rapor İndir <img src="~/excel.png" />
-                </button>
-            </form>
-            
+        <div class="col-8"></div>
+        <div class="col-1">
+
+            <a asp-action="DownloadExcelDocument" data-toggle="tooltip" data-placement="left" title="Rapor İndir">
+                <img src="~/excel.png" />
+            </a>
+
         </div>
     </div>
 
@@ -29,9 +30,9 @@
 <form asp-controller="Surveys" asp-action="Index" method="get">
     <p>
         Başlık: <input type="text" name="SearchString" />
-        <button class="btn"  type="submit">
+        <button class="btn" type="submit">
 
-        <img src="~/search.png" />
+            <img src="~/search.png" />
         </button>
     </p>
 </form>
@@ -62,34 +63,34 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.numberOfConfirmation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.numberOfYes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.numberOfNo)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.numberOfConfirmation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.numberOfYes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.numberOfNo)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Deadline)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Deadline)
+                </td>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Detaylar</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id" class="delete" data-id="@item.Id">
-                    <img src="~/trash (1).png" />
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Detaylar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="delete" data-id="@item.Id">
+                        <img src="~/trash (1).png" />
 
-                </a>
-            </td>
-        </tr>
+                    </a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
@@ -134,6 +135,13 @@
             }
         })
     </script>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
 }
 
 

@@ -21,6 +21,14 @@ namespace ConfirmationProject.Controllers
         private IUserService userService;
         IRoleService roleService;
 
+
+        public AccountController( IUserService userService, IRoleService roleService)
+        {
+ 
+            this.roleService = roleService;
+            this.userService = userService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -31,12 +39,7 @@ namespace ConfirmationProject.Controllers
             return View();
         }
 
-        public AccountController( IUserService userService, IRoleService roleService)
-        {
- 
-            this.roleService = roleService;
-            this.userService = userService;
-        }
+
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginModel userLoginModel)
         {

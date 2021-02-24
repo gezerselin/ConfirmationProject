@@ -36,25 +36,25 @@ namespace ConfirmationProject.Controllers
             response.Answer = inlineRadioOptions;
             responseService.addResponse(response);
 
+            var SelectedSurvey = surveyService.GetSurveysById(surveyid);
+
             if (inlineRadioOptions == "yes")
             {
-                var survey = surveyService.GetSurveysById(response.SurveyId);
-       
-                survey.numberOfYes += 1;
+                SelectedSurvey.numberOfYes += 1;
 
-                responseService.EditSurvey(survey);
+                responseService.EditSurvey(SelectedSurvey);
                 
             }else if (inlineRadioOptions == "no")
             {
-                var survey = surveyService.GetSurveysById(response.SurveyId);
-                survey.numberOfNo += 1;
 
-                responseService.EditSurvey(survey);
+                SelectedSurvey.numberOfNo += 1;
+
+                responseService.EditSurvey(SelectedSurvey);
             }
 
-            var SelectedSurvey = surveyService.GetSurveysById(surveyid);
+            
 
-            var user = userService.GetUserById(SelectedSurvey.CreatorId);
+            var CreatorUser = userService.GetUserById(SelectedSurvey.CreatorId);
 
             var UserInfo = userService.GetUserById((Convert.ToInt32(User.Identity.Name)));
 
@@ -73,7 +73,7 @@ namespace ConfirmationProject.Controllers
             client.EnableSsl = true;
             client.Credentials = new System.Net.NetworkCredential("selingezr@gmail.com", "gefzzofrfjxnwuql");
             objeto_mail.From = new MailAddress("selingezr@gmail.com");
-            objeto_mail.To.Add(new MailAddress(user.Email));
+            objeto_mail.To.Add(new MailAddress(CreatorUser.Email));
             objeto_mail.Subject = $"Yeni Yanıt - ({SelectedSurvey.Title})";
             objeto_mail.Body = $"Başlık : {SelectedSurvey.Title} \n" +
                 $"Detay:{SelectedSurvey.Detail} \n\n" +
