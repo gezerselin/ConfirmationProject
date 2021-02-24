@@ -17,8 +17,9 @@ namespace ConfirmationProject.Controllers
     
     public class AccountController : Controller
     {
-        private ConfirmationProjectDbContext dbContext;
+     
         private IUserService userService;
+        IRoleService roleService;
 
         public IActionResult Index()
         {
@@ -30,9 +31,10 @@ namespace ConfirmationProject.Controllers
             return View();
         }
 
-        public AccountController(ConfirmationProjectDbContext dbContext, IUserService userService)
+        public AccountController( IUserService userService, IRoleService roleService)
         {
-            this.dbContext = dbContext;
+ 
+            this.roleService = roleService;
             this.userService = userService;
         }
         [HttpPost]
@@ -43,21 +45,18 @@ namespace ConfirmationProject.Controllers
             {
                 List<Claim> claims = new List<Claim>();
 
-                var role = dbContext.Roles.FirstOrDefault(x => x.Id == user.RoleId);
-
+                var role = roleService.GetRoleById(user.RoleId);
+                
                 claims.Add(new Claim(ClaimTypes.Name, user.Id.ToString()));
                 claims.Add(new Claim(ClaimTypes.Role, role.Name));
-
-
+                claims.Add(new Claim("FirstName", user.Name));
+                claims.Add(new Claim("LastName", user.LastName));
 
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
-   
                 return Redirect("/");
-
-
             }
             else
             {
@@ -65,9 +64,7 @@ namespace ConfirmationProject.Controllers
                 return View();
             }
 
-
         }
-
 
         public async Task<IActionResult> LogOut()
         {

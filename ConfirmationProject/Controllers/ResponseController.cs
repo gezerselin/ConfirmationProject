@@ -15,13 +15,16 @@ namespace ConfirmationProject.Controllers
     [Authorize]
     public class ResponseController : Controller
     {
-        private ConfirmationProjectDbContext dbContext;
         private IResponseService responseService;
+        private ISurveyService surveyService;
+        private IUserService userService;
       
-        public ResponseController(ConfirmationProjectDbContext dbContext, IResponseService responceService)
+        public ResponseController( IResponseService responceService,ISurveyService surveyService, IUserService userService)
         {
             this.responseService = responceService;
-            this.dbContext = dbContext;
+            this.userService = userService;
+            this.surveyService = surveyService;
+            
         }
         [HttpPost]
         public IActionResult AddResponse( string inlineRadioOptions, string note, int surveyid, int userid)
@@ -35,23 +38,27 @@ namespace ConfirmationProject.Controllers
 
             if (inlineRadioOptions == "yes")
             {
-                var survey = dbContext.Surveys.FirstOrDefault(x => x.Id == response.SurveyId);
+                var survey = surveyService.GetSurveysById(response.SurveyId);
+       
                 survey.numberOfYes += 1;
 
                 responseService.EditSurvey(survey);
                 
             }else if (inlineRadioOptions == "no")
             {
-                var survey = dbContext.Surveys.FirstOrDefault(x => x.Id == response.SurveyId);
+                var survey = surveyService.GetSurveysById(response.SurveyId);
                 survey.numberOfNo += 1;
 
                 responseService.EditSurvey(survey);
             }
 
-            var SelectedSurvey = dbContext.Surveys.FirstOrDefault(x => x.Id == surveyid);
-            var user = dbContext.Users.FirstOrDefault(x => x.Id == SelectedSurvey.CreatorId);
+            var SelectedSurvey = surveyService.GetSurveysById(surveyid);
 
-            var UserInfo = dbContext.Users.FirstOrDefault(x => x.Id == (Convert.ToInt32(User.Identity.Name)));
+            var user = userService.GetUserById(SelectedSurvey.CreatorId);
+
+            var UserInfo = userService.GetUserById((Convert.ToInt32(User.Identity.Name)));
+
+          
 
             double requiredConfirmation = Math.Round((((double)SelectedSurvey.numberOfYes / (double)SelectedSurvey.numberOfConfirmation) * 100), 2);
 
@@ -67,12 +74,14 @@ namespace ConfirmationProject.Controllers
             client.Credentials = new System.Net.NetworkCredential("selingezr@gmail.com", "gefzzofrfjxnwuql");
             objeto_mail.From = new MailAddress("selingezr@gmail.com");
             objeto_mail.To.Add(new MailAddress(user.Email));
-            objeto_mail.Subject = "Yeni Onay";
-            objeto_mail.Body = $" Onay veren : {UserInfo.Name} {UserInfo.LastName} \n" +
+            objeto_mail.Subject = $"Yeni Yanıt - ({SelectedSurvey.Title})";
+            objeto_mail.Body = $"Başlık : {SelectedSurvey.Title} \n" +
+                $"Detay:{SelectedSurvey.Detail} \n\n" +
+                $"Yanıt veren : {UserInfo.Name} {UserInfo.LastName} \n" +
                 $"İletişim:\n {UserInfo.Email}\n " +
-                $"{UserInfo.PhoneNumber}\n" +
+                $"{UserInfo.PhoneNumber}\n\n" +
                 $"Cevabı : {response.Answer} \n" +
-                $"Notu: {response.Note}\n" +
+                $"Notu: {response.Note}\n\n" +
                 $"Kabul sayısı : {SelectedSurvey.numberOfYes}  Red sayısı : {SelectedSurvey.numberOfNo} \n" +
                 $"Kabul eden sayısı/Onay sayısı: %{requiredConfirmation} \nKabul için kalan onay sayısı: {(SelectedSurvey.numberOfConfirmation-SelectedSurvey.numberOfYes)} ";
             client.Send(objeto_mail);
@@ -83,9 +92,9 @@ namespace ConfirmationProject.Controllers
         public IActionResult CreateResponse(int surveyid)
         {
 
-            var SelectedSurvey = dbContext.Surveys.FirstOrDefault(x => x.Id == surveyid);
+            var SelectedSurvey = surveyService.GetSurveysById(surveyid);
 
-           
+
             return View(SelectedSurvey);
         }
     }

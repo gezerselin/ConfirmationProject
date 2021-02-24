@@ -30,6 +30,8 @@ namespace ConfirmationProject
             services.AddTransient<ISurveyService, SurveyService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IResponseService, ResponseService>();
+            services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IGenderService, GenderService>();
             services.AddControllersWithViews();
             services.AddDbContext<ConfirmationProjectDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("db")));
             
@@ -37,6 +39,7 @@ namespace ConfirmationProject
                 .AddCookie(option =>
                 {
                     option.LoginPath = "/Account/Login";
+                    
                 });
         }
 

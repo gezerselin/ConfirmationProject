@@ -21,10 +21,34 @@ namespace ConfirmationProject.Services
             return dbContext.Users.FirstOrDefault(u => u.UserName == UserName && u.Password == password);
         }
 
-        public int EditSurvey(User user)
+
+        public User GetUserById(int id)
         {
+            return dbContext.Users.FirstOrDefault(x => x.Id == id);
+        }
+
+        public void AddUser(User user)
+        {
+            dbContext.Users.Add(user);
+
+            dbContext.SaveChanges();
+        }
+
+        public void updateUser(User user)
+        {
+
             dbContext.Entry(user).State = EntityState.Modified;
-            return dbContext.SaveChanges();
+            dbContext.SaveChanges();
+        }
+
+        public bool Exists(int id)
+        {
+            return dbContext.Users.Any(e => e.Id == id);
+        }
+
+        public IList<User> GetUsers()
+        {
+            return dbContext.Users.AsNoTracking().ToList();
         }
     }
 }

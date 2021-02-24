@@ -9,6 +9,13 @@ namespace ConfirmationProject.Services
     public interface IUserService
     {
         User ValidUser(string UserName, string password);
-        int EditSurvey(User user);
+    
+
+        User GetUserById(int id);
+        void AddUser(User user);
+        void updateUser(User user);
+        bool Exists(int id);
+
+        IList<User> GetUsers();
     }
 }

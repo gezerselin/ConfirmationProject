@@ -8,24 +8,31 @@ using Microsoft.EntityFrameworkCore;
 using ConfirmationProject.Data;
 using ConfirmationProject.Models;
 using Microsoft.AspNetCore.Authorization;
+using ConfirmationProject.Services;
 
 namespace ConfirmationProject.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly ConfirmationProjectDbContext _context;
+        private IRoleService roleService;
+        private IGenderService genderService;
+        private IUserService userService;
+        
 
-        public UsersController(ConfirmationProjectDbContext context)
+        public UsersController( IRoleService roleService,IGenderService genderService, IUserService userService)
         {
-            _context = context;
+            this.userService = userService;
+            this.roleService = roleService;
+            this.genderService = genderService;
+           
         }
 
 
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name");
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name");
+            ViewData["GenderId"] = new SelectList(genderService.GetGenders(), "Id", "Name");
+            ViewData["RoleId"] = new SelectList(roleService.GetRoles(), "Id", "Name");
             return View();
         }
 
@@ -38,31 +45,33 @@ namespace ConfirmationProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
+                userService.AddUser(user);
+                
+              
                 return Redirect("/Account/Login");
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", user.GenderId);
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", user.RoleId);
+            ViewData["GenderId"] = new SelectList(genderService.GetGenders(), "Id", "Name", user.GenderId);
+            ViewData["RoleId"] = new SelectList(roleService.GetRoles(), "Id", "Name", user.RoleId);
             return Redirect("/Account/Login");
         }
 
 
         // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+
+            var user = userService.GetUserById(id);
             if (user == null)
             {
                 return NotFound();
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", user.GenderId);
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", user.RoleId);
+            ViewData["GenderId"] = new SelectList(genderService.GetGenders(), "Id", "Name", user.GenderId);
+            ViewData["RoleId"] = new SelectList(roleService.GetRoles(), "Id", "Name", user.RoleId);
             return View(user);
         }
 
@@ -82,8 +91,8 @@ namespace ConfirmationProject.Controllers
             {
                 try
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    userService.updateUser(user);
+                   
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -99,8 +108,8 @@ namespace ConfirmationProject.Controllers
                 string url = $"/Users/Edit/{(Convert.ToInt32(User.Identity.Name))}";
                 return Redirect(url);
             }
-            ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", user.GenderId);
-            ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", user.RoleId);
+            ViewData["GenderId"] = new SelectList(genderService.GetGenders(), "Id", "Name", user.GenderId);
+            ViewData["RoleId"] = new SelectList(roleService.GetRoles(), "Id", "Name", user.RoleId);
             return View(user);
         }
 
@@ -108,22 +117,22 @@ namespace ConfirmationProject.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return userService.Exists(id);
+            
         }
 
         [HttpPost]
         public IActionResult EditPassWord(string OldPassword, string newPassword, string newSamePassword)
         {
             int id = Convert.ToInt32(User.Identity.Name);
-            var user = _context.Users.FirstOrDefault(x => x.Id == id);
+            var user = userService.GetUserById(id);
 
             if (OldPassword == user.Password)
             {
                 if (newPassword == newSamePassword)
                 {
                     user.Password = newPassword;
-                    _context.Entry(user).State = EntityState.Modified;
-                    _context.SaveChanges();
+                    userService.updateUser(user);
                     return Json("Şifreniz Güncellendi");
                 }
                 else

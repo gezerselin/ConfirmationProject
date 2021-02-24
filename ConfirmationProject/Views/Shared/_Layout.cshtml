@@ -1,7 +1,7 @@
-﻿@{ 
+﻿
+@{ 
     int id = (Convert.ToInt32(User.Identity.Name));
 
-    
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -48,12 +48,18 @@
                                 </button>
 
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @{
-                                        int UserId = Convert.ToInt32(User.Identity.Name);
-
+                                    
+                                    @{ 
+                                        var Name = (from c in User.Claims
+                                                        where c.Type == "FirstName"
+                                                        select c.Value).FirstOrDefault();
+                                        var LastName = (from c in User.Claims
+                                                        where c.Type == "LastName"
+                                                        select c.Value).FirstOrDefault();
                                     }
-                                    <li> </li>
-                                    <li><a class="dropdown-item" asp-action="Edit" asp-controller="Users" asp-route-id="@UserId">Kullanıcı Bilgilerim</a></li>
+                                    <li class="dropdown-item-text"  style="color:coral; font-weight:bold " >   @Name @LastName</li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-action="Edit" asp-controller="Users" asp-route-id="@id">Kullanıcı Bilgilerim</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LogOut">Çıkış Yap</a></li>
                                 </ul>

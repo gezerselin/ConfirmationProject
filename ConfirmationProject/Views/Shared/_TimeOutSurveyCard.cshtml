@@ -2,9 +2,9 @@
 @{
     int UserId = Convert.ToInt32(User.Identity.Name);
     double oran = Math.Round((((double)Model.numberOfYes / (double)Model.numberOfConfirmation) * 100), 2);
-    
+    double oranBar = Math.Round((((double)Model.numberOfYes / (double)Model.numberOfConfirmation) * 100), 0);
     var responcses = Model.Responses.FirstOrDefault(x => x.UserId == UserId);
-       
+
 
 
 
@@ -39,12 +39,17 @@
                 {
                     @if (responcses.Answer == "yes")
                     {
-                     <p>Cevabınız: Evet </p>
+                        <p>Cevabınız: Evet </p>
                     }
                     else if (responcses.Answer == "no")
                     {
                         <p>Cevabınız: Hayır</p>
                     }
+                    @if (responcses.Note != null)
+                    {
+                        <p>Notunuz : @responcses.Note</p>
+                    }
+
                 }
 
                 else
@@ -66,7 +71,7 @@
 
        
         <div class="progress">
-            <div class="progress-bar bg-success" role="progressbar" style="width: @oran%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">@oran %</div>
+            <div class="progress-bar bg-success" role="progressbar" style="width: @oranBar%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">@oran %</div>
         </div>
 
 

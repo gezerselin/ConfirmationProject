@@ -18,17 +18,18 @@ namespace ConfirmationProject.Controllers
     {
         private ISurveyService surveyService;
         private readonly ILogger<HomeController> _logger;
-        private ConfirmationProjectDbContext dbContext;
 
-        public HomeController(ILogger<HomeController> logger , ISurveyService surveyService, ConfirmationProjectDbContext dbContext)
+
+        public HomeController(ILogger<HomeController> logger , ISurveyService surveyService)
         {
-            this.dbContext = dbContext;
+         
             this.surveyService = surveyService;
             _logger = logger;
         }
 
-        public IActionResult Index(int page=1)
+        public IActionResult Index(int page = 1)
         {
+
             int UserId = Convert.ToInt32(User.Identity.Name);
             int totalSurvey = 0;
             var pageSize = 3;
@@ -41,15 +42,20 @@ namespace ConfirmationProject.Controllers
                 {
                     pagingSurvey.Add(item);
                     totalSurvey++;
-
                 }
             }
+            var pagingSurveys = pagingSurvey.OrderBy(p => p.Id)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize);
 
             var totalPages = Math.Ceiling((decimal)totalSurvey / pageSize);
-            ViewBag.totalPages=totalPages;
+            ViewBag.totalPages = totalPages;
 
-            return View(pagingSurvey);
+            return View(pagingSurveys);
+
+
         }
+
 
         public IActionResult AnsweredSurvey(int page=1)
         {
@@ -134,7 +140,7 @@ namespace ConfirmationProject.Controllers
         public IActionResult Search(string searchItem, int page=1)
 
         {
-            var surveys = from m in dbContext.Surveys.Include(x => x.Responses).ThenInclude(x => x.User) select m;
+            var surveys = from m in surveyService.GetSurveys() select m;
             if (!String.IsNullOrEmpty(searchItem))
             {
                 surveys = surveys.Where(s => s.Title.Contains(searchItem));
