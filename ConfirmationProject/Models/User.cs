@@ -46,6 +46,9 @@ namespace ConfirmationProject.Models
         public int GenderId { get; set; }
         public Gender Gender { get; set; }
 
+        [Display(Name="Yeni anketlerden haberdar olmak ister misiniz?")]
+        public bool MailConfirmation { get; set; }
+
         public IList<Response> Responses { get; set; }
     }
 }

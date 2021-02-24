@@ -10,6 +10,7 @@ using ConfirmationProject.Models;
 using ClosedXML.Excel;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Mail;
 
 namespace ConfirmationProject.Controllers
 {
@@ -100,6 +101,45 @@ namespace ConfirmationProject.Controllers
             {
                 _context.Add(survey);
                 await _context.SaveChangesAsync();
+
+
+                var UserInfo = _context.Users.FirstOrDefault(x => x.Id == (Convert.ToInt32(User.Identity.Name)));
+
+                var users = _context.Users;
+
+                MailMessage objeto_mail = new MailMessage();
+
+
+                SmtpClient client = new SmtpClient();
+                client.Port = 587;
+                client.Host = "smtp.gmail.com";
+                client.Timeout = 1000000;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = true;
+                client.EnableSsl = true;
+                client.Credentials = new System.Net.NetworkCredential("selingezr@gmail.com", "gefzzofrfjxnwuql");
+                objeto_mail.From = new MailAddress("selingezr@gmail.com");
+
+                foreach (var item in users)
+                {
+                    if (item.MailConfirmation == true)
+                    {
+                        objeto_mail.To.Add(new MailAddress(item.Email));
+                    }
+                    
+                }
+
+                objeto_mail.Subject = "Yeni Anket";
+                objeto_mail.Body =$"\n{survey.Title}\n" +
+                    $"{survey.Detail}\n\n" +
+                    $"Gerekli onay sayısı:{survey.numberOfConfirmation}\n" +
+                    $"Anket kapanış tarihi: {survey.Deadline}\n\n"+
+                    $"Anketi oluşturan : {UserInfo.Name} {UserInfo.LastName} ";
+
+
+                client.Send(objeto_mail);
+
+
                 return RedirectToAction(nameof(Index));
             }
             return View(survey);

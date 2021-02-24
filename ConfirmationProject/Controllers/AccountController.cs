@@ -43,7 +43,6 @@ namespace ConfirmationProject.Controllers
             {
                 List<Claim> claims = new List<Claim>();
 
-                Debug.WriteLine("deneme");
                 var role = dbContext.Roles.FirstOrDefault(x => x.Id == user.RoleId);
 
                 claims.Add(new Claim(ClaimTypes.Name, user.Id.ToString()));

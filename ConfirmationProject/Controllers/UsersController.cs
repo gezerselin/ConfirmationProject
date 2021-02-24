@@ -34,13 +34,13 @@ namespace ConfirmationProject.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,LastName,Email,UserName,Password,PhoneNumber,RoleId,GenderId")] User user)
+        public async Task<IActionResult> Create([Bind("Id,Name,LastName,Email,UserName,Password,PhoneNumber,RoleId,GenderId,MailConfirmation")] User user)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Account/Login");
             }
             ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", user.GenderId);
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", user.RoleId);
@@ -71,7 +71,7 @@ namespace ConfirmationProject.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LastName,Email,UserName,Password,PhoneNumber,RoleId,GenderId")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LastName,Email,UserName,Password,PhoneNumber,RoleId,GenderId,MailConfirmation")] User user)
         {
             if (id != user.Id)
             {
@@ -96,7 +96,8 @@ namespace ConfirmationProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                string url = $"/Users/Edit/{(Convert.ToInt32(User.Identity.Name))}";
+                return Redirect(url);
             }
             ViewData["GenderId"] = new SelectList(_context.Genders, "Id", "Name", user.GenderId);
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", user.RoleId);
@@ -115,7 +116,7 @@ namespace ConfirmationProject.Controllers
         {
             int id = Convert.ToInt32(User.Identity.Name);
             var user = _context.Users.FirstOrDefault(x => x.Id == id);
-       
+
             if (OldPassword == user.Password)
             {
                 if (newPassword == newSamePassword)
@@ -137,7 +138,7 @@ namespace ConfirmationProject.Controllers
             }
 
 
-            
+
         }
     }
 }

@@ -13,11 +13,14 @@
         <div class="col-3">
             <a asp-action="Create">Yeni bir anket oluştur</a>
         </div>
-        <div class="col-8"></div>
-        <div class="col-1">
-            <a asp-action="DownloadExcelDocument">
-                <img src="~/excel.png" />
-            </a>
+        <div class="col-6"></div>
+        <div class="col-3">
+            <form asp-action="DownloadExcelDocument">
+                <button class="btn" >
+                    Rapor İndir <img src="~/excel.png" />
+                </button>
+            </form>
+            
         </div>
     </div>
 
