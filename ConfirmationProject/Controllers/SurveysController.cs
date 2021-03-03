@@ -104,9 +104,9 @@ namespace ConfirmationProject.Controllers
 
                 var users = userService.GetUsers();
 
+
+
                 MailMessage objeto_mail = new MailMessage();
-
-
                 SmtpClient client = new SmtpClient();
                 client.Port = 587;
                 client.Host = "smtp.gmail.com";
@@ -116,7 +116,6 @@ namespace ConfirmationProject.Controllers
                 client.EnableSsl = true;
                 client.Credentials = new System.Net.NetworkCredential("selingezr@gmail.com", "gefzzofrfjxnwuql");
                 objeto_mail.From = new MailAddress("selingezr@gmail.com");
-
                 foreach (var item in users)
                 {
                     if (item.MailConfirmation == true)
@@ -125,7 +124,6 @@ namespace ConfirmationProject.Controllers
                     }
                     
                 }
-
                 objeto_mail.Subject = "Yeni Anket";
                 objeto_mail.Body =$"\n{survey.Title}\n" +
                     $"{survey.Detail}\n\n" +
@@ -189,10 +187,8 @@ namespace ConfirmationProject.Controllers
         }
 
         // GET: Surveys/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-
-
             var survey = surveyService.GetSurveysById(id);
             if (survey == null)
             {
@@ -247,8 +243,6 @@ namespace ConfirmationProject.Controllers
                     int index = 1;
                     foreach (var item in Survey)
                     {
-
-
                         worksheet.Cell(index + 1, 1).Value = item.Id;
                         worksheet.Cell(index + 1, 2).Value = item.Title;
                         worksheet.Cell(index + 1, 3).Value = item.Detail;
@@ -276,8 +270,6 @@ namespace ConfirmationProject.Controllers
 
                         index++;
                     }
-
-
                     using (var stream = new MemoryStream())
                     {
                         workbook.SaveAs(stream);

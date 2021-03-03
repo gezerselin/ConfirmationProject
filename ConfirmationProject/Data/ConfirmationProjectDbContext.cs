@@ -40,24 +40,14 @@ namespace ConfirmationProject.Data
                 .HasMany(x => x.Responses)
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId);
-                
-                
-
+                         
             modelBuilder.Entity<Survey>()
                 .HasMany(x => x.Responses)
                 .WithOne(x => x.Survey)
                 .HasForeignKey(x => x.SurveyId);
-
-                
-
-
-
-
+              
             base.OnModelCreating(modelBuilder);
         }
-
-
-
     }
 
 }
